@@ -35,6 +35,11 @@ DrawGlyph(unsigned char *image,
   }
 }
 
+enum TextDirection {
+  TEXT_DIRECTION_LTR = 0,
+  TEXT_DIRECTION_RTL = 1
+};
+
 // see: https://en.wikipedia.org/wiki/Netpbm_format#PGM_example
 static void
 PrintPGM(unsigned char *image, FT_Int width, FT_Int height)
@@ -89,13 +94,16 @@ main(int argc, char **argv)
   
   static const std::string str = u8""
     //"The quick brown [fox] jumps over the lazy dog? 123"
-    "قد ماتَ قـومٌ ومَا مَاتَتْ مـكـارِمُهم        وعَاشَ قومٌ وهُم فِي النَّاس ِأمْواتُ"
+    //"قد ماتَ قـومٌ ومَا مَاتَتْ مـكـارِمُهم        وعَاشَ قومٌ وهُم فِي النَّاس ِأمْواتُ"
+    "أبجد abc"
     //"أهلاً بالعالم 123"
     //"█عربي█"
     //"♥ أهلا ♥ Hello ♥"
     //"ABCD أبجد EFGH"
     //"أبجد ABCD هوز"
   ;
+
+  TextDirection direction = TEXT_DIRECTION_LTR;
 
   ///////////////////////////////////////////////////////////////
   // ICU reordering
@@ -111,7 +119,7 @@ main(int argc, char **argv)
 
   // Reorder string into visual order
   UBiDi* bidi = ubidi_openSized(length + 1, 0, &error);
-  ubidi_setPara(bidi, utf16str, length, HB_DIRECTION_LTR, NULL, &error);
+  ubidi_setPara(bidi, utf16str, length, direction, NULL, &error);
 
   length = ubidi_writeReordered(bidi, utf16strReordered, length + 1, UBIDI_DO_MIRRORING , &error);
   ubidi_close(bidi);
