@@ -119,7 +119,7 @@ main(int argc, char **argv)
 
   // Reorder string into visual order
   UBiDi* bidi = ubidi_openSized(length + 1, 0, &error);
-  ubidi_setPara(bidi, utf16str, length, direction, NULL, &error);
+  ubidi_setPara(bidi, utf16str, length, direction, nullptr, &error);
 
   length = ubidi_writeReordered(bidi, utf16strReordered, length + 1, UBIDI_DO_MIRRORING , &error);
   ubidi_close(bidi);
@@ -185,7 +185,7 @@ main(int argc, char **argv)
   {
     FT_BBox glyphBbox;
 
-    FT_Set_Transform(face, NULL, &translation);
+    FT_Set_Transform(face, nullptr, &translation);
     FT_Load_Glyph(face, codepoint, FT_LOAD_RENDER);
     FT_Glyph glyph;
     FT_Get_Glyph(glyphSlot, &glyph);
@@ -215,7 +215,7 @@ main(int argc, char **argv)
   translation.y = aboveOriginShift;
   for (auto codepoint : glyphCodepoints)
   {
-    FT_Set_Transform(face, NULL, &translation);
+    FT_Set_Transform(face, nullptr, &translation);
     FT_Load_Glyph(face, codepoint, FT_LOAD_RENDER);
 
     DrawGlyph(image, width, height,
